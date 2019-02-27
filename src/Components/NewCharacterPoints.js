@@ -40,9 +40,10 @@ class NewCharacterPoints extends Component {
     }
 
     checkForward = () => {
-        if (this.state.pointBuy === 0) {
+        if (this.state.pointBuy === 1) {
             setGlobalState('forward', true);
             setGlobalState('points', this.state.points);
+            this.props.toggleReload();
         } else {
             setGlobalState('forward', false);
         }
@@ -183,14 +184,14 @@ class NewCharacterPoints extends Component {
                                 <div>
                                     <p>Points left: {this.state.pointBuy}</p>
                                     <span>Strength:</span>
-                                        <input type="number" value={value.str} onChange={
+                                        <input type="number" value={this.state.points.str} onChange={
                                                 (event) => {
                                                     const newStrength = event.target.value;
                                                     if (newStrength > 1) {
                                                         const oldPoints = this.state.pointBuy;
                                                         const oldStrength = this.state.points.str;
                                                         if (oldPoints - (newStrength - oldStrength) >= 0) {
-                                                            let newPointObj = value;
+                                                            let newPointObj = this.state.points;
                                                             newPointObj.str = event.target.value;
                                                             this.setState({points: newPointObj});
                                                             this.setState({pointBuy: oldPoints - (newStrength - oldStrength)});
@@ -202,14 +203,14 @@ class NewCharacterPoints extends Component {
                                         />
                                     <br />
                                     <span>Dexterity:</span>
-                                    <input type="number" value={value.dex} onChange={
+                                    <input type="number" value={this.state.points.dex} onChange={
                                             (event) => {
                                                 const newDexterity = event.target.value;
                                                 if (newDexterity > 1) {
                                                     const oldPoints = this.state.pointBuy;
                                                     const oldDexterity = this.state.points.dex;
                                                     if (oldPoints - (newDexterity - oldDexterity) >= 0) {
-                                                        let newPointObj = value;
+                                                        let newPointObj = this.state.points;
                                                         newPointObj.dex = event.target.value;
                                                         this.setState({points: newPointObj});
                                                         this.setState({pointBuy: oldPoints - (newDexterity - oldDexterity)});
@@ -221,14 +222,14 @@ class NewCharacterPoints extends Component {
                                     />
                                     <br />
                                     <span>Constitution</span>
-                                    <input type="number" value={value.con} onChange={
+                                    <input type="number" value={this.state.points.con} onChange={
                                         (event) => {
                                             const newConstitution = event.target.value;
                                             if (newConstitution > 1) {
                                                 const oldPoints = this.state.pointBuy;
                                                 const oldConstitution = this.state.points.con;
                                                 if (oldPoints - (newConstitution - oldConstitution) >= 0) {
-                                                    let newPointObj = value;
+                                                    let newPointObj = this.state.points;
                                                     newPointObj.con = event.target.value;
                                                     this.setState({points: newPointObj});
                                                     this.setState({pointBuy: oldPoints - (newConstitution - oldConstitution)});
@@ -240,14 +241,14 @@ class NewCharacterPoints extends Component {
                                     />
                                     <br />
                                     <span>Intelligence</span>
-                                    <input type="number" value={value.int} onChange={
+                                    <input type="number" value={this.state.points.int} onChange={
                                         (event) => {
                                             const newIntelligence = event.target.value;
                                             if (newIntelligence > 1) {
                                                 const oldPoints = this.state.pointBuy;
                                                 const oldIntelligence = this.state.points.int;
                                                 if (oldPoints - (newIntelligence - oldIntelligence) >= 0) {
-                                                    let newPointObj = value;
+                                                    let newPointObj = this.state.points;
                                                     newPointObj.int = event.target.value;
                                                     this.setState({points: newPointObj});
                                                     this.setState({pointBuy: oldPoints - (newIntelligence - oldIntelligence)});
@@ -259,14 +260,14 @@ class NewCharacterPoints extends Component {
                                     />
                                     <br />
                                     <span>Wisdom</span>
-                                    <input type="number" value={value.wis} onChange={
+                                    <input type="number" value={this.state.points.wis} onChange={
                                         (event) => {
                                             const newWisdom = event.target.value;
                                             if (newWisdom > 1) {
                                                 const oldPoints = this.state.pointBuy;
                                                 const oldWisdom = this.state.points.wis;
                                                 if (oldPoints - (newWisdom - oldWisdom) >= 0) {
-                                                    let newPointObj = value;
+                                                    let newPointObj = this.state.points;
                                                     newPointObj.wis = event.target.value;
                                                     this.setState({points: newPointObj});
                                                     this.setState({pointBuy: oldPoints - (newWisdom - oldWisdom)});
@@ -278,14 +279,14 @@ class NewCharacterPoints extends Component {
                                     />
                                     <br />
                                     <span>Charisma</span>
-                                    <input type="number" value={value.cha} onChange={
+                                    <input type="number" value={this.state.points.cha} onChange={
                                         (event) => {
                                             const newCharisma = event.target.value;
                                             if (newCharisma > 1) {
                                                 const oldPoints = this.state.pointBuy;
                                                 const oldCharisma = this.state.points.cha;
                                                 if (oldPoints - (newCharisma - oldCharisma) >= 0) {
-                                                    let newPointObj = value;
+                                                    let newPointObj = this.state.points;
                                                     newPointObj.cha = event.target.value;
                                                     this.setState({points: newPointObj});
                                                     this.setState({pointBuy: oldPoints - (newCharisma - oldCharisma)});
@@ -529,6 +530,7 @@ class NewCharacterPoints extends Component {
                                             onClick={(event) => {
                                                 event.preventDefault();
                                                 setGlobalState('forward', true);
+                                                this.props.toggleReload();
                                                 update(this.state.points);
                                             }}
                                         >Go forward!</button>
@@ -751,6 +753,16 @@ class NewCharacterPoints extends Component {
                                                 </div>
                                             }
                                             <p>Charisma: {this.state.points.cha}</p>
+                                            {this.state.disabled.str && this.state.disabled.dex && this.state.disabled.con && this.state.disabled.int && this.state.disabled.wis && this.state.disabled.cha &&
+                                                <button
+                                                    onClick={(event) => {
+                                                        event.preventDefault();
+                                                        setGlobalState('forward', true);
+                                                        this.props.toggleReload();
+                                                        update(this.state.points);
+                                                    }}
+                                                >Go forward!</button>
+                                            }
                                         </div>
                                     }
                                 </div>
@@ -805,6 +817,7 @@ class NewCharacterPoints extends Component {
                                 event.preventDefault();
                                 update(this.state.points);
                                 setGlobalState('forward', true);
+                                this.props.toggleReload();
                             }}>Continue</button>
                             <br />
                         </div>
@@ -995,7 +1008,9 @@ class NewCharacterPoints extends Component {
                                         <button
                                             onClick={(event) => {
                                                 event.preventDefault();
+                                                update(this.state.points);
                                                 setGlobalState('forward', true);
+                                                this.props.toggleReload();
                                             }}
                                         >Continue</button>
                                     }
