@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { getGlobalState, setGlobalState } from './../Global/state';
 
 class Wizard extends Component {
 	state = {
-		page: 0
+        page: 0,
+        reload: false,
     };
 
 	_navigateBack = () => {
@@ -14,8 +16,13 @@ class Wizard extends Component {
 	_navigateNext = () => {
 		this.setState(prevState => ({
 			page: prevState.page + 1
-		}));
-	};
+        }));
+        setGlobalState('forward', false);
+    };
+
+    _toggleReload = () => {
+        this.state.reload ? this.setState({reload: false}) : this.setState({reload: true});
+    }
 
 	render() {
 		const { page } = this.state;
@@ -26,6 +33,7 @@ class Wizard extends Component {
             <div>
                 <Page
                     page={Page}
+                    toggleReload={this._toggleReload}
                 />
                 {page > 0 && 
                     <button
@@ -34,7 +42,7 @@ class Wizard extends Component {
                         <p>Back</p>
                     </button>
                 }
-                {page < this.props.pages.length - 1 && <button
+                {getGlobalState('forward') && page < this.props.pages.length - 1 && <button
                     onClick={this._navigateNext}
                 >
                     <p>Next</p>
