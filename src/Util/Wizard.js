@@ -1,11 +1,24 @@
 import React, { Component } from 'react';
 import { getGlobalState, setGlobalState } from './../Global/state';
+import { Prompt } from 'react-router-dom';
 
 class Wizard extends Component {
 	state = {
         page: 0,
         reload: false,
     };
+
+    onUnload = (event) => {
+        alert("");
+    }
+
+    componentDidMount() {
+        window.addEventListener("beforeunload", this.onUnload);
+        window.onbeforeunload = () => {
+            this.onUnload();
+            return "";
+        }
+    }
 
 	_navigateBack = () => {
 		this.setState(prevState => ({
